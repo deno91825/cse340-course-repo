@@ -13,3 +13,67 @@ VALUES
 ('UnityServe Volunteers','A volunteer coordination group supporting local charities and service initiatives.','hello@unityserve.org','unityserve-logo.png')
 
 SELECT * FROM organizations;
+
+CREATE TABLE categories (
+    category_id SERIAL PRIMARY KEY,
+    name VARCHAR(100) NOT NULL
+);
+
+CREATE TABLE projects (
+    project_id SERIAL PRIMARY KEY,
+    organization_id INT NOT NULL,
+    name VARCHAR(100) NOT NULL,
+    description TEXT NOT NULL,
+
+    FOREIGN KEY (organization_id)
+        REFERENCES organizations(organization_id)
+);
+
+CREATE TABLE project_categories (
+    project_id INT NOT NULL,
+    category_id INT NOT NULL,
+
+    PRIMARY KEY(project_id, category_id),
+
+    FOREIGN KEY(project_id)
+        REFERENCES projects(project_id),
+
+    FOREIGN KEY(category_id)
+        REFERENCES categories(category_id)
+);
+
+INSERT INTO categories(name)
+VALUES
+('Education'),
+('Health'),
+('Environment');
+
+INSERT INTO projects
+(organization_id, name, description)
+VALUES
+
+(1,
+'Park Cleanup',
+'Join us to clean up local parks and make them beautiful!'),
+
+(3,
+'Food Drive',
+'Help collect and distribute food to those in need.'),
+
+(2,
+'Community Tutoring',
+'Volunteer to tutor students in various subjects.');
+
+INSERT INTO categories(name)
+VALUES
+('Education'),
+('Health'),
+('Environment');
+
+INSERT INTO project_categories
+(project_id, category_id)
+VALUES
+
+(1,3),
+(2,2),
+(3,1);

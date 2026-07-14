@@ -3,6 +3,7 @@ import { fileURLToPath } from 'url';
 import path from 'path';
 import { testConnection } from './scr/models/db.js';
 import { getAllOrganizations } from './scr/models/organizations.js';
+import { getAllCategories } from './scr/models/categories.js';
 
 
 const NODE_ENV = process.env.NODE_ENV?.toLowerCase() || 'production';
@@ -49,10 +50,21 @@ app.get('/projects', async(req, res) => {
     res.render('projects', { title })
 });
 
-app.get('/categories', async(req, res) => {
-    const title = 'Categories'
-    res.render('categories', { title })
+app.get('/categories', async (req, res) => {
+
+    const categories = await getAllCategories();
+
+    console.log(categories);
+
+    const title = 'Service Project Categories';
+
+    res.render('categories', { 
+        title,
+        categories
+    });
+
 });
+
 
 app.listen(PORT, async () => {
   try {
