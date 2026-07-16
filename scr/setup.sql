@@ -70,3 +70,27 @@ VALUES
 (1,3),
 (2,2),
 (3,1);
+
+ALTER TABLE projects
+ADD COLUMN date DATE;
+
+ALTER TABLE projects
+ADD COLUMN location VARCHAR(100);
+
+UPDATE projects
+SET
+date = '2026-08-15',
+location = 'Central Park'
+WHERE project_id = 1;
+
+UPDATE projects
+SET
+date = '2026-08-20',
+location = 'Community Center'
+WHERE project_id = 2;
+
+UPDATE projects
+SET
+date = '2026-08-25',
+location = 'City Library'
+WHERE project_id = 3;

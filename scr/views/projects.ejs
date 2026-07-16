@@ -1,12 +1,29 @@
-<%-include ('partials/header') %>
-    <main>
-        <h1><%= title%></h1>
-        
-        <h2>Upcoming Service Projects</h2>
-        <ul>
-            <li>Park Cleanup - Join us to clean up local parks and make them beautiful!</li>
-            <li>Food Drive - Help collect and distribute food to those in need.</li>
-            <li>Community Tutoring - Volunteer to tutor students in various subjects.</li>
-        </ul>
-    </main>
-<%- include ('partials/footer')%>
+<%- include('partials/header') %>
+
+<main>
+
+<h1><%= title %></h1>
+
+<ul>
+
+<% projects.forEach(project => { %>
+
+    <li>
+
+        <h2><%= project.name %></h2>
+
+        <p><%= project.description %></p>
+
+        <p><strong>Date:</strong> <%= project.date %></p>
+
+        <p><strong>Location:</strong> <%= project.location %></p>
+
+    </li>
+
+<% }); %>
+
+</ul>
+
+</main>
+
+<%- include('partials/footer') %>
