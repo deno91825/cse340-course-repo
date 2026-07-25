@@ -4,13 +4,16 @@ const getAllProjects = async () => {
 
     const query = `
         SELECT
-            project_id,
-            organization_id,
-            name,
-            description,
-            date,
-            location
-        FROM projects;
+            projects.project_id,
+            projects.organization_id,
+            projects.name,
+            projects.description,
+            projects.date,
+            projects.location,
+            organizations.name AS organization_name
+        FROM projects
+        JOIN organizations
+        ON projects.organization_id = organizations.organization_id;
     `;
 
     const result = await db.query(query);
@@ -18,7 +21,52 @@ const getAllProjects = async () => {
     return result.rows;
 };
 
+const getProjectDetails = async (projectId) => {
 
+    const query = `
+        SELECT
+            projects.project_id,
+            projects.organization_id,
+            projects.name,
+            projects.description,
+            projects.date,
+            projects.location,
+            organizations.name AS organization_name
+        FROM projects
+        JOIN organizations
+        ON projects.organization_id = organizations.organization_id
+        WHERE projects.project_id = $1;
+    `;
+
+    const queryParams = [projectId];
+
+    const result = await db.query(query, queryParams);
+
+    return result.rows.length > 0
+        ? result.rows[0]
+        : null;
+};
+
+const getProjectsByOrganizationId = async (organizationId) => {
+
+    const query = `
+        SELECT
+            project_id,
+            organization_id,
+            name,
+            description,
+            date,
+            location
+        FROM projects
+        WHERE organization_id = $1;
+    `;
+
+    const queryParams = [organizationId];
+
+    const result = await db.query(query, queryParams);
+
+    return result.rows;
+};
 const getCategoriesByProjectId = async (projectId) => {
 
     const query = `
@@ -41,5 +89,7 @@ const getCategoriesByProjectId = async (projectId) => {
 
 export { 
     getAllProjects,
-    getCategoriesByProjectId
+    getProjectsByOrganizationId,
+    getCategoriesByProjectId,
+    getProjectDetails
 };

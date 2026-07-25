@@ -1,6 +1,14 @@
-import { getAllOrganizations } from '../models/organizations.js';
+import { 
+    getAllOrganizations,
+    getOrganizationDetails
+} from '../models/organizations.js';
+
+import { 
+    getProjectsByOrganizationId 
+} from '../models/projects.js';
 
 
+// Display all organizations
 const showOrganizationsPage = async (req, res) => {
 
     const organizations = await getAllOrganizations();
@@ -11,8 +19,29 @@ const showOrganizationsPage = async (req, res) => {
         title,
         organizations
     });
-
 };
 
 
-export { showOrganizationsPage };
+// Display one organization
+const showOrganizationDetailsPage = async (req, res) => {
+
+    const organizationId = req.params.id;
+
+    const organizationDetails = await getOrganizationDetails(organizationId);
+
+    const projects = await getProjectsByOrganizationId(organizationId);
+
+    const title = organizationDetails.name;
+
+    res.render('organization', {
+        title,
+        organizationDetails,
+        projects
+    });
+};
+
+
+export {
+    showOrganizationsPage,
+    showOrganizationDetailsPage
+};

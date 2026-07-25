@@ -53,6 +53,26 @@ app.use((req,res,next)=>{
 app.use(router);
 
 
+// 404 Error Handler
+app.use((req, res, next) => {
+    res.status(404).render('404', {
+        title: 'Page Not Found'
+    });
+});
+
+
+// 500 Error Handler
+app.use((err, req, res, next) => {
+
+    console.error(err);
+
+    res.status(500).render('500', {
+        title: 'Server Error'
+    });
+
+});
+
+
 app.listen(PORT, async () => {
   try {
     await testConnection();
