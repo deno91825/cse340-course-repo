@@ -38,6 +38,11 @@ app.use(session({
 
 app.use(flash);
 
+app.use((req, res, next) => {
+    res.locals.flash = req.flash;
+    next();
+});
+
 // to Allow Express to receive form submissions.
 app.use(express.urlencoded({ extended: true }));
 
