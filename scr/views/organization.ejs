@@ -4,6 +4,11 @@
 
     <h1><%= organizationDetails.name %></h1>
 
+    <p>
+        <a href="/edit-organization/<%= organizationDetails.organization_id %>">
+            Edit Organization
+        </a>
+    </p>
     <img 
         src="/images/<%= organizationDetails.logo_filename %>" 
         alt="<%= organizationDetails.name %> logo"
@@ -27,6 +32,11 @@
                 <a href="/project/<%= project.project_id %>">
                     <%= project.name %>
                 </a>
+
+                <a href="/edit-organization/<%= organizationDetails.id %>">
+                    Edit
+                </a>
+                
             </li>
         <% }); %>
     </ul>

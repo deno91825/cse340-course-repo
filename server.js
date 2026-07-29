@@ -3,14 +3,15 @@ import { fileURLToPath } from 'url';
 import path from 'path';
 import { testConnection } from './scr/models/db.js';
 import router from './scr/routes.js';
-
+import session from 'express-session';
+import flash from './scr/middleware/flash.js';
 
 const NODE_ENV = process.env.NODE_ENV?.toLowerCase() || 'production';
 const PORT = process.env.PORT || 3000;
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
-
+const SESSION_SECRET = process.env.SESSION_SECRET;
 
 
 
@@ -26,7 +27,24 @@ app.set('views', path.join(__dirname, 'scr/views'));
   * Configure Express middleware
   */
 
-// Serve static files from the public directory
+
+// Setting up session management
+app.use(session({
+    secret: SESSION_SECRET,
+    resave: false,
+    saveUninitialized: true,
+    cookie: { maxAge: 60 * 60 * 1000 }
+}));
+
+app.use(flash);
+
+// to Allow Express to receive form submissions.
+app.use(express.urlencoded({ extended: true }));
+
+// to Allow Express to receive JSON data..
+app.use(express.json());
+
+// toServe static files from the public directory...
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use((req,res,next)=>{

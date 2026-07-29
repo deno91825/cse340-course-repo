@@ -86,10 +86,43 @@ const getCategoriesByProjectId = async (projectId) => {
     return result.rows;
 };
 
+const createProject = async (
+    name,
+    description,
+    location,
+    date,
+    organizationId
+) =>{
+    const query =`
+    INSERT INTO projects(
+    organization_id,
+    name,
+    description,
+    date,
+    location
+    )
+    VALUES ($1, $2, $3, $4, $5)
+    RETURNING project_id;
+    `;
+
+    const queryParams = [
+        organizationId,
+        name,
+        description,
+        date,
+        location
+    ];
+
+    const result = await db.query(query, queryParams);
+
+    return result.rows[0].project_id
+};
+
 
 export { 
     getAllProjects,
     getProjectsByOrganizationId,
     getCategoriesByProjectId,
-    getProjectDetails
+    getProjectDetails,
+    createProject
 };

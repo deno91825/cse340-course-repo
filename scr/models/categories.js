@@ -51,9 +51,100 @@ const getProjectsByCategoryId = async (categoryId) => {
     return result.rows;
 };
 
+const getCategoriesByProjectId = async (projectId) => {
+
+    const query = `
+        SELECT
+            categories.category_id,
+            categories.name
+        FROM categories
+        JOIN project_categories
+        ON categories.category_id = project_categories.category_id
+        WHERE project_categories.project_id = $1;
+    `;
+
+    const queryParams = [projectId];
+
+    const result = await db.query(query, queryParams);
+
+    return result.rows;
+};
+
+const assignCategoryToProject = async (projectId, categoryId) => {
+
+    const query = `
+        INSERT INTO project_categories
+        (project_id, category_id)
+        VALUES ($1, $2);
+    `;
+
+    const queryParams = [
+        projectId,
+        categoryId
+    ];
+
+    await db.query(query, queryParams);
+
+};
+
+const updateCategoryAssignments = async (projectId, categoryIds) => {
+
+    const deleteQuery = `
+        DELETE FROM project_categories
+        WHERE project_id = $1;
+    `;
+
+    await db.query(deleteQuery, [projectId]);
+
+
+    for (const categoryId of categoryIds) {
+
+        await assignCategoryToProject(
+            projectId,
+            categoryId
+        );
+
+    }
+
+};
+
+const createCategory = async (name) => {
+
+    const query = `
+        INSERT INTO categories
+        (name)
+        VALUES ($1)
+        RETURNING category_id;
+    `;
+
+    const queryParams = [name];
+
+    const result = await db.query(query, queryParams);
+
+    return result.rows[0].category_id;
+};
+
+
+const updateCategory = async (id, name) => {
+
+    const query = `
+        UPDATE categories
+        SET name = $1
+        WHERE category_id = $2;
+    `;
+
+    const queryParams = [name, id];
+
+    await db.query(query, queryParams);
+};
+
 
 export { 
     getAllCategories,
     getCategoryDetails,
-    getProjectsByCategoryId
+    getProjectsByCategoryId,
+    getCategoriesByProjectId,
+    updateCategoryAssignments,
+    createCategory,
+    updateCategory
 };
