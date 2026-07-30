@@ -16,9 +16,15 @@
         </ul>
     </nav>
 
-    <%
-const messages = flash() || {};
-console.log("HEADER FLASH:", messages);
+   <%
+const messages = (typeof flash === 'function')
+    ? flash()
+    : {
+        success: [],
+        error: [],
+        warning: [],
+        info: []
+    };
 %>
 
 <% Object.keys(messages).forEach(type => { %>

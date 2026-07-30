@@ -28,7 +28,6 @@ app.set('views', path.join(__dirname, 'scr/views'));
   */
 
 
-// Setting up session management
 app.use(session({
     secret: SESSION_SECRET,
     resave: false,
@@ -38,17 +37,8 @@ app.use(session({
 
 app.use(flash);
 
-app.use((req, res, next) => {
-    res.locals.flash = req.flash;
-    next();
-});
-
-// to Allow Express to receive form submissions.
 app.use(express.urlencoded({ extended: true }));
-
-// to Allow Express to receive JSON data..
 app.use(express.json());
-
 // toServe static files from the public directory...
 app.use(express.static(path.join(__dirname, 'public')));
 
@@ -87,11 +77,13 @@ app.use((req, res, next) => {
 // 500 Error Handler
 app.use((err, req, res, next) => {
 
-    console.error(err);
+    console.error("==== SERVER ERROR ====");
+    console.error(err.stack);
 
-    res.status(500).render('500', {
-        title: 'Server Error'
-    });
+    res.status(500).send(`
+        <h1>Server Error</h1>
+        <pre>${err.stack}</pre>
+    `);
 
 });
 
