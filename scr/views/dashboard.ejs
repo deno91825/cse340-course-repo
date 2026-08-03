@@ -1,0 +1,17 @@
+<%- include('partials/header') %>
+
+    <h1>Dashboard</h1>
+
+    <p>
+        Welcome, <%= name %>
+    </p>
+        <% if (user && user.role_name === "admin") { %>
+
+            <a href="/users">
+                View Registered Users
+            </a>
+
+        <% } %>
+    <p>
+        Email: <%= email %>
+    </p>
