@@ -1,5 +1,6 @@
 import express from 'express';
 
+import * as usersController from "./controllers/users.js";
 import { showHomePage } from './controllers/index.js';
 import { 
     showOrganizationsPage,
@@ -98,6 +99,28 @@ router.post(
     processAssignCategoriesForm
 );
 
+
+router.get("/register", usersController.showUserRegistrationForm);
+
+router.post("/register", usersController.processUserRegistrationForm);
+
+
+router.get(
+    "/login",
+    usersController.showLoginForm
+);
+
+
+router.post(
+    "/login",
+    usersController.processLoginForm
+);
+
+
+router.get(
+    "/logout",
+    usersController.processLogout
+);
 
 
 export default router;
