@@ -2,7 +2,7 @@ import pool from "./db.js";
 import bcrypt from "bcrypt";
 import db from "./db.js";
 
-export async function createUser(name, email, passwordHash) {
+const createUser = async (name, email, passwordHash) => {
     const sql = `
         INSERT INTO users
         (name, email, password_hash, role_id)
@@ -20,7 +20,7 @@ export async function createUser(name, email, passwordHash) {
     const result = await pool.query(sql, values);
 
     return result.rows[0];
-}
+};
 
 const findUserByEmail = async (email) => {
     const query = `
@@ -93,6 +93,7 @@ const getAllUsers = async () => {
 };
 
 export {
+    createUser,
     authenticateUser,
     getAllUsers
 };

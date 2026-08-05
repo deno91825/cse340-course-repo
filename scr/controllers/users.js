@@ -1,4 +1,5 @@
 import bcrypt from "bcrypt";
+
 import { 
     createUser,
     authenticateUser,
@@ -7,14 +8,15 @@ import {
 
 const saltRounds = 10;
 
-export async function showUserRegistrationForm(req, res) {
+// GET /register
+const showUserRegistrationForm = async (req, res) => {
     res.render("register", {
         title: "Register"
     });
-}
+};
 
 // POST /register
-export async function processUserRegistrationForm(req, res) {
+const processUserRegistrationForm = async (req, res) => {
     try {
         const { name, email, password } = req.body;
 
@@ -27,57 +29,65 @@ export async function processUserRegistrationForm(req, res) {
         console.error(error);
         res.status(500).send("Registration failed");
     }
-}
+};
 
-export async function showLoginForm(req, res) {
+// GET /login
+const showLoginForm = async (req, res) => {
     res.render("login", {
         title: "Login"
     });
-}
+};
 
-export async function processLoginForm(req, res) {
-
+// POST /login
+const processLoginForm = async (req, res) => {
     const { email, password } = req.body;
 
     const user = await authenticateUser(email, password);
 
     if (user) {
-
         req.session.user = user;
 
         console.log(req.session.user);
 
         res.redirect("/dashboard");
-
     } else {
-
         res.redirect("/login");
-
     }
-}
+};
 
-export async function processLogout(req, res) {
-
+// GET /logout
+const processLogout = async (req, res) => {
     req.session.destroy(() => {
         res.redirect("/login");
     });
+};
 
-}
-
-export function requireLogin(req, res, next) {
-
+// Middleware: require login
+const requireLogin = (req, res, next) => {
     if (!req.session.user) {
-
         res.redirect("/login");
-
         return;
     }
 
     next();
-}
+};
 
-export function showDashboard(req, res) {
+// Middleware factory: require role
+const requireRole = (role) => {
+    return (req, res, next) => {
+        if (
+            req.session.user &&
+            req.session.user.role_name === role
+        ) {
+            next();
+        } else {
+            res.redirect("/");
+        }
+    };
+};
 
+// Dashboard
+const showDashboard = (req, res) => {
     const { name, email } = req.session.user;
 
     res.render("dashboard", {
@@ -85,31 +95,10 @@ export function showDashboard(req, res) {
         name,
         email
     });
-}
+};
 
-export function requireRole(role) {
-
-    return (req, res, next) => {
-
-        if (
-            req.session.user &&
-            req.session.user.role_name === role
-        ) {
-
-            next();
-
-        } else {
-
-            res.redirect("/");
-
-        }
-
-    };
-
-}
-
+// Users page
 const showUsersPage = async (req, res) => {
-
     const users = await getAllUsers();
 
     const title = "Registered Users";
@@ -118,9 +107,16 @@ const showUsersPage = async (req, res) => {
         title,
         users
     });
-
 };
 
 export {
+    showUserRegistrationForm,
+    processUserRegistrationForm,
+    showLoginForm,
+    processLoginForm,
+    processLogout,
+    requireLogin,
+    showDashboard,
+    requireRole,
     showUsersPage
 };

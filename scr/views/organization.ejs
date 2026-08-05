@@ -4,11 +4,13 @@
 
     <h1><%= organizationDetails.name %></h1>
 
-    <p>
-        <a href="/edit-organization/<%= organizationDetails.organization_id %>">
-            Edit Organization
-        </a>
-    </p>
+    <% if (user && user.role_name === "admin") { %>
+        <p>
+            <a href="/edit-organization/<%= organizationDetails.organization_id %>">
+                Edit Organization
+            </a>
+        </p>
+    <% } %>
     <img 
         src="/images/<%= organizationDetails.logo_filename %>" 
         alt="<%= organizationDetails.name %> logo"
@@ -33,9 +35,11 @@
                     <%= project.name %>
                 </a>
 
-                <a href="/edit-organization/<%= organizationDetails.id %>">
-                    Edit
-                </a>
+                <% if (user && user.role_name === "admin") { %>
+                    <a href="/edit-organization/<%= organizationDetails.id %>">
+                        Edit
+                    </a>
+                <% } %>
                 
             </li>
         <% }); %>

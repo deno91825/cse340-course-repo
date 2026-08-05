@@ -13,23 +13,25 @@
             <li><a href="/organizations">Organizations</a></li>
             <li><a href="/projects">Projects</a></li>
              <li><a href="/categories">Categories</a></li>
-             <li><% if (isLoggedIn) { %>
+             <li>
+    <% if (isLoggedIn) { %>
 
-    <a href="/logout">
-        Logout
-    </a>
+        <a href="/logout">
+            Logout
+        </a>
 
-<% } else { %>
+    <% } else { %>
 
-    <a href="/register">
-        Register
-    </a>
+        <a href="/register">
+            Register
+        </a>
 
-    <a href="/login">
-        Login
-    </a>
+        <a href="/login">
+            Login
+        </a>
 
-<% } %></li>
+    <% } %>
+</li>
         </ul>
     </nav>
 
